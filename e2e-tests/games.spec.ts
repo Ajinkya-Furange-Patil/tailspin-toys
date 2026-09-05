@@ -24,6 +24,40 @@ test.describe('Game Listing and Navigation', () => {
     });
   });
 
+  test('should filter games by category and publisher', async ({ page }) => {
+    await test.step('Navigate to homepage', async () => {
+      await page.goto('/');
+    });
+
+    await test.step('Capture the initial result count', async () => {
+      const initialCount = await page.locator('[data-testid="game-card"]').count();
+      expect(initialCount).toBeGreaterThan(0);
+    });
+
+    await test.step('Apply a category filter and verify the list shrinks', async () => {
+      const categoryFilter = page.locator('[data-filter-group="category"]').first();
+      await categoryFilter.check();
+      const filteredByCategoryCount = await page.locator('[data-testid="game-card"]:visible').count();
+      expect(filteredByCategoryCount).toBeGreaterThan(0);
+      expect(filteredByCategoryCount).toBeLessThan(await page.locator('[data-testid="game-card"]').count());
+    });
+
+    await test.step('Apply a publisher filter to combine filters', async () => {
+      const publisherFilter = page.locator('[data-filter-group="publisher"]').first();
+      const filteredByCategoryCount = await page.locator('[data-testid="game-card"]:visible').count();
+      await publisherFilter.check();
+      const filteredByBothCount = await page.locator('[data-testid="game-card"]:visible').count();
+      expect(filteredByBothCount).toBeGreaterThanOrEqual(0);
+      expect(filteredByBothCount).toBeLessThanOrEqual(filteredByCategoryCount);
+    });
+
+    await test.step('Clear the filters and restore the full list', async () => {
+      const expectedTotal = await page.locator('[data-testid="game-card"]').count();
+      await page.getByTestId('clear-filters').click();
+      await expect(page.locator('[data-testid="game-card"]:visible')).toHaveCount(expectedTotal);
+    });
+  });
+
   test('should navigate to correct game details page when clicking on a game', async ({ page }) => {
     let gameId: string | null;
     let gameTitle: string | null;
