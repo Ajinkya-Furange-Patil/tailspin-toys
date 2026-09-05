@@ -114,6 +114,25 @@ There is no Svelte/React layer. When a page genuinely needs client behaviour, ad
 - Run `npx astro sync` to (re)generate route/content types before linting or type-checking
 - `.astro` files are type-checked by `npm run typecheck:astro` (which runs `astro sync` then `astro check`), on the classic `typescript` package. The pure TypeScript in `db/`, `src/lib/`, and `src/types/` is type-checked separately by `npm run typecheck` (the native TS 7 compiler, `tsgo`), which does **not** process `.astro` files.
 
+### Component props and documentation
+
+Every reusable `.astro` component should document its `Props` contract. Add a typed `interface Props` or `type Props = { ... }` and write a short comment when the component's API is not immediately obvious.
+
+```astro
+---
+interface Props {
+  title: string;
+  featured?: boolean;
+}
+
+const { title, featured = false } = Astro.props;
+---
+
+<article class:list={["card", { "card-featured": featured }]}>...</article>
+```
+
+Documenting the component contract helps maintainers understand the API without reading the entire implementation, and it keeps props aligned as the component evolves.
+
 ## Best Practices
 
 - Keep data fetching in frontmatter (build time); avoid client-side fetching

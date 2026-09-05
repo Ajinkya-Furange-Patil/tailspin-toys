@@ -14,6 +14,14 @@ This is a crowdfunding platform for games with a developer theme. The applicatio
 
 ## Code standards
 
+### Commenting and documentation standards
+
+- Comment intent, not mechanics. Explain why a branch, helper, or workaround exists, and what decision or edge case it addresses.
+- Remove comments that simply repeat the code directly below them.
+- Every exported helper in `db/` and `src/lib/` should include TSDoc/JSDoc that documents its purpose, parameters, and return value.
+- Reusable `.astro` components should expose a typed `Props` contract that reads like a clear API.
+- Treat stale comments as bugs: update or delete them in the same change when the related code changes.
+
 ### Required Before Each Commit
 
 #### Testing guidelines

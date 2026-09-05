@@ -55,6 +55,29 @@ export async function getAllGameIds(db: Database): Promise<number[]> {
 - Map raw rows to the app-facing `Game`/`Publisher`/`Category` types in one place; don't leak Drizzle row shapes into components.
 - Keep ordering/lookup logic in `games.ts`, not in pages.
 
+## Documentation and comments
+
+Every exported function in `db/` and `src/lib/` must have a TSDoc/JSDoc block that documents its purpose, each parameter, and the return value. This keeps the data layer self-explanatory for tests, future maintainers, and Copilot agents.
+
+- Explain the function's intent and non-obvious decisions, not the mechanics of the code below it.
+- Document the injectable `db` parameter clearly when it is the first argument so the testing pattern stays obvious.
+- Keep parameter names and return descriptions aligned with the signature; outdated docs are treated like stale code.
+
+Example:
+
+```ts
+/**
+ * Return the ids for all games in a stable, title-sorted order.
+ *
+ * @param db - Database connection used for the query.
+ * @returns A list of game ids ordered by title for deterministic builds.
+ */
+export async function getAllGameIds(db: Database): Promise<number[]> {
+  const rows = await db.select({ id: games.id }).from(games).orderBy(asc(games.title));
+  return rows.map((r) => r.id);
+}
+```
+
 ## Determinism
 
 Seed-derived values must be reproducible across builds. Derive star ratings from a stable hash of the title (`ratingFromTitle`) — **never** `Math.random()`.

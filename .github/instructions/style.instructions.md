@@ -46,6 +46,33 @@ ALL UI components MUST use dark theme colors:
 - Use semantic grouping: layout, spacing, colors, typography
 - Keep utility combinations readable and maintainable
 
+## Commenting and TypeScript style
+
+Write comments that explain intent, not mechanics. A comment should tell a future maintainer why a decision exists or what edge case it handles; it should not repeat the code in prose.
+
+Good:
+
+```ts
+// Keep the title ordering stable so the generated static pages remain deterministic.
+const sorted = [...games].sort((a, b) => a.title.localeCompare(b.title));
+```
+
+Avoid:
+
+```ts
+// Sort the games by title.
+const sorted = [...games].sort((a, b) => a.title.localeCompare(b.title));
+```
+
+TypeScript rules for this repo:
+
+- Prefer explicit parameter and return types for exported functions in `db/` and `src/lib/`.
+- Keep interfaces and types in the same file as their consuming component or helper when practical.
+- Avoid `any` unless there is a narrow, justified reason; prefer the most specific type available.
+- Keep formatting consistent with the project: semicolons, trailing commas, and readable multiline signatures.
+
+The repo's ESLint config already enforces `@typescript-eslint/no-unused-vars`, and future rule additions should continue to prefer editor feedback over noisy comment policing.
+
 ## Modern UI Patterns
 
 - Rounded corners: `rounded-lg`, `rounded-xl`, `rounded-2xl`

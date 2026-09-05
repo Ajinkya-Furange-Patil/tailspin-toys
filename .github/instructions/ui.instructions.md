@@ -51,6 +51,17 @@ Refer to technology-specific instruction files:
 - Use props for configuration, not duplication
 - Document component APIs with TypeScript types
 
+### Documentation and comments
+
+Comment the intent behind a decision, not the mechanics of the code. Good comments explain why a pattern exists, which edge case it handles, or what trade-off the implementation makes. Avoid restating what the code already shows in plain English.
+
+Examples:
+
+- Good: "Keep the sorting stable so the generated static pages stay deterministic across builds."
+- Avoid: "Sort the games by title before rendering them."
+
+When a component or helper is reused, the API contract should be clear from its typed props and exported signatures; stale comments are treated as bugs and should be updated or removed with the code they describe.
+
 ## Development Workflow
 
 1. **Choose the right tool**: 
