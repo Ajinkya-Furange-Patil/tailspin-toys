@@ -41,7 +41,9 @@ const { game } = Astro.props;
             {game.starRating !== null ? (
                 <StarRating rating={game.starRating} />
             ) : (
-                <span class="text-slate-400 text-sm" data-testid="game-rating">No rating yet</span>
+                <span class="text-slate-400 text-sm" data-testid="game-rating" aria-label="Game rating: no rating yet">
+                    No rating yet
+                </span>
             )}
 
             <p class="text-slate-400 mb-4 text-sm line-clamp-2" data-testid="game-description">{game.description}</p>
